@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/show_messages', 'MessageController@show');
+Route::post('/message/create', 'MessageController@create');
+
+Auth::routes();
+
+
+
+Route::get('/home', 'HomeController@index')->name('home');
