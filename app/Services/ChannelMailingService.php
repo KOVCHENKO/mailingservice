@@ -31,16 +31,29 @@ class ChannelMailingService
         array_push($this->channelsArray, $smsChannel, $emailChannel, $telegramChannel);
     }
 
-    public function sendToDifferentChannels($providersArray)
+    /**
+     * @param $providersArray
+     * @param $messageId
+     * Отправка по разным каналам
+     */
+    public function sendToDifferentChannels($providersArray, $messageId)
     {
         foreach ($this->channelsArray as $singleChannel)
         {
             if(in_array($singleChannel->type, $providersArray))
             {
                 $singleChannel->send();
-                $this->channelController->saveStatusSend($singleChannel->type);
+
+                $this->channelController->saveStatusSend($singleChannel->type, $messageId);
             }
         }
+    }
+
+    /**
+     * Проверить статус сообщения
+     */
+    public function getMessageStatus()
+    {
 
     }
 }

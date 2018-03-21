@@ -17,14 +17,34 @@ class ChannelController extends Controller
         $this->channel = $channel;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * Все каналы
+     */
     public function getAll()
     {
         return $this->channel->all();
     }
 
-    public function saveStatusSend($channelType)
+    /**
+     * @param $channelType
+     * @param $messageId
+     * Записать в БД статус об отправке сообщения
+     */
+    public function saveStatusSend($channelType, $messageId)
     {
-        $specificChannel = $this->channel->where('type', $channelType)->first();
+        $specificChannel = $this->channel->getByType($channelType);
+        $specificChannel->messages()->attach($messageId, ['status' => 'sent']);
+    }
 
+    /**
+     * @param $channelType
+     * @param $messageId
+     * Сообщение не удалось отправить ни по одному из провайдеров
+     */
+    public function saveStatusFailed($channelType, $messageId)
+    {
+        $specificChannel = $this->channel->getByType($channelType);
+        $specificChannel->messages()->attach($messageId, ['status' => 'failed']);
     }
 }

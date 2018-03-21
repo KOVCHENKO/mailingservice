@@ -6,8 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
 {
-    public function message()
+    public function getByType($type)
     {
-        return $this->belongsToMany();
+        return $this->where('type', $type)->first();
+    }
+
+    public function messages()
+    {
+        return $this->belongsToMany('App\Models\Message', 'messages_channels');
     }
 }

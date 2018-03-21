@@ -39,10 +39,18 @@ class MessageController extends Controller
      */
     public function create(Request $request)
     {
-        $this->channelMailingService->sendToDifferentChannels($request->provider_type);
-//        $this->message->create([
-//
-//        ]);
+        $message = $this->message->create([
+            'type' => $request->type,
+            'contact' => $request->contact,
+            'data' => $request->data
+        ]);
+
+        $this->channelMailingService->sendToDifferentChannels($request->provider_type, $message->id);
+    }
+
+    public function getMessageStatus($messageId)
+    {
+        $this->channelMailingService->getMessageStatus($messageId);
     }
 
 

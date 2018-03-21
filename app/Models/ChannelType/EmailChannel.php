@@ -8,7 +8,6 @@ class EmailChannel implements ChannelInterface
 
     public function send()
     {
-        dd("Catch Email");
         // TODO: Implement send() method.
     }
 
