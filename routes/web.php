@@ -11,15 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/show_messages', 'MessageController@show');
-Route::post('/message/create', 'MessageController@create');
-
 Auth::routes();
 
+Route::group(['middleware' => 'auth'], function() {
+
+    Route::get('/', 'MessageController@show');
+
+    Route::get('/show_messages', 'MessageController@show');
+    Route::post('/message/create', 'MessageController@create');
+    Route::get('/message/get_status/{id}', 'MessageController@getStatus');
 
 
-Route::get('/home', 'HomeController@index')->name('home');
+});
+
+//Route::get('/home', 'HomeController@index')->name('home');

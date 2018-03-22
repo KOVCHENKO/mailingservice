@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    {{--<div class="container">--}}
+    <h4> Создать сообщение </h4>
+
         <form method="POST" role="form" action="{{ url('/message/create') }}">
             @csrf
 
@@ -17,15 +18,15 @@
                 <label for="channel" class="col-sm-2 col-form-label text-md-right">Канал</label>
 
                 <div class="form-group row">
-                        @foreach($channels as $channel)
-                    <div class="col-md-4">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="provider_type[]" value="{{ $channel->type }}"> {{ $channel->name }}
-                                </label>
-                            </div>
-                    </div>
-                        @endforeach
+                    @foreach($channels as $channel)
+                        <div class="col-md-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="provider_type[]" value="{{ $channel->type }}"> {{ $channel->name }}
+                                    </label>
+                                </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 
@@ -52,6 +53,50 @@
             </div>
         </form>
 
+    @if ($errors->any())
+        <div class="help-block">
+            @foreach($errors->all() as $error)
+                <p style="color: grey">{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
 
-    {{--</div>--}}
+    <hr>
+
+    <h4> Сообщения </h4>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Тип</th>
+            <th>Контакт</th>
+            <th>Данные</th>
+            <th>Создано</th>
+            <th>Запросить подтверждение</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($messages as $message)
+            <tr>
+                <td> {{ $message -> type }}</td>
+                <td> {{ $message -> contact }}</td>
+                <td> {{ $message -> data }}</td>
+                <td> {{ $message -> created_at }}</td>
+                <td> <a href="{{ url('/message/get_status/'.$message -> id)  }}">Запрос</a></td>
+
+                {{--<td>--}}
+                    {{--<select class="form-control">--}}
+                        {{--@foreach($admin -> admin_IPs as $singleIP)--}}
+                            {{--<option>{{ $singleIP }}</option>--}}
+                        {{--@endforeach--}}
+                    {{--</select>--}}
+                {{--</td>--}}
+
+            </tr>
+
+        @endforeach
+        </tbody>
+    </table>
+
+
+
 @endsection

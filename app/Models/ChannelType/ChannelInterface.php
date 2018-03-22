@@ -11,7 +11,7 @@ namespace App\Models\ChannelType;
 
 interface ChannelInterface
 {
-    public function send();
+    public function send($connectionData);
 
-    public function getStatus();
+    public function getStatus($messageId);
 }

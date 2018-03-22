@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MessageRequest;
 use App\Models\Message;
 use App\Services\ChannelMailingService;
 use Illuminate\Http\Request;
@@ -29,15 +30,19 @@ class MessageController extends Controller
     public function show()
     {
         $channels = $this->channelController->getAll();
+        $messages = $this->message->all();
 
-        return view('messages.messages')->with('channels', $channels);
+        return view('messages.messages')->with([
+                'channels' => $channels,
+                'messages' => $messages
+            ]);
     }
 
     /**
      * @param Request $request
      * Создать новое сообщение
      */
-    public function create(Request $request)
+    public function create(MessageRequest $request)
     {
         $message = $this->message->create([
             'type' => $request->type,
@@ -45,12 +50,25 @@ class MessageController extends Controller
             'data' => $request->data
         ]);
 
-        $this->channelMailingService->sendToDifferentChannels($request->provider_type, $message->id);
+        $this->channelMailingService->sendToDifferentChannels(
+            $request->provider_type,
+            [
+                'contact' => $request->contact,
+                'data' => $request->data
+            ],
+            $message->id
+        );
+
+        return redirect('/show_messages');
+
     }
 
-    public function getMessageStatus($messageId)
+    public function getStatus($messageId)
     {
-        $this->channelMailingService->getMessageStatus($messageId);
+        $message = $this->message->where('id', $messageId)->with('channels')->first();
+        $this->channelMailingService->getMessageStatus($message);
+
+        return redirect('/show_messages');
     }
 
 

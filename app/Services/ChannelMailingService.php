@@ -34,26 +34,40 @@ class ChannelMailingService
     /**
      * @param $providersArray
      * @param $messageId
+     * @param $contactData
      * Отправка по разным каналам
      */
-    public function sendToDifferentChannels($providersArray, $messageId)
+    public function sendToDifferentChannels($providersArray, $contactData, $messageId)
     {
         foreach ($this->channelsArray as $singleChannel)
         {
             if(in_array($singleChannel->type, $providersArray))
             {
-                $singleChannel->send();
-
+                $singleChannel->send($contactData);
                 $this->channelController->saveStatusSend($singleChannel->type, $messageId);
             }
         }
     }
 
     /**
+     * @param $messageId
+     * @param $channels
      * Проверить статус сообщения
      */
-    public function getMessageStatus()
+    public function getMessageStatus($message)
     {
+        foreach ($message->channels as $channel)
+        {
+            foreach ($this->channelsArray as $singleChannelType)
+            {
+                if($channel->type == $singleChannelType->type)
+                {
+                    $status = $singleChannelType->getStatus($message->id);
+                    $message->channels()->updateExistingPivot($channel->id, [ 'status' => $status ]);
+                }
+            }
+        }
+
 
     }
 }

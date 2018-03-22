@@ -2,17 +2,52 @@
 
 namespace App\Models\ChannelType;
 
+use GuzzleHttp\Client;
+
 class TelegramChannel implements ChannelInterface
 {
     public $type = 'telegram';
+    private $client;
 
-    public function send()
+    /**
+     * TelegramChannel constructor.
+     * @param $client
+     */
+    public function __construct(Client $client)
     {
-        // TODO: Implement send() method.
+        $this->client = $client;
     }
 
-    public function getStatus()
+
+    public function send($connectionData)
     {
-        // TODO: Implement getStatus() method.
+        /*
+        $res = $this->$client->request('GET', 'http://smska.ru/api.php', [
+            'query' => [
+                'phone' => $connectionData['contact'],
+                'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
+            ]
+        ]);
+
+        $result = $res->getBody();
+        */
+
+        return true;
+    }
+
+    public function getStatus($messageId)
+    {
+        /*
+        $res = $this->client->request('GET', 'http://smska.ru/api.php', [
+            'query' => [
+                'phone' => $connectionData['contact'],
+                'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
+            ]
+        ]);
+
+        $result = $res->getBody();
+        */
+
+        return 'delivered';
     }
 }

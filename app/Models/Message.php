@@ -11,4 +11,14 @@ class Message extends Model
         'contact',
         'data',
     ];
+
+    public function channels()
+    {
+        return $this->belongsToMany('App\Models\Channel', 'messages_channels');
+    }
+
+    public function updateMessageChannelStatus()
+    {
+        $user->roles()->updateExistingPivot($roleId, $attributes);
+    }
 }
