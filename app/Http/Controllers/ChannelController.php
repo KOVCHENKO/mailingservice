@@ -47,4 +47,27 @@ class ChannelController extends Controller
         $specificChannel = $this->channel->getByType($channelType);
         $specificChannel->messages()->attach($messageId, ['status' => 'failed']);
     }
+
+    /**
+     * Показать view для создания канала
+     */
+    public function showCreateView()
+    {
+        return view('channel.create');
+    }
+
+    /**
+     * @param Request $request
+     * Создать новый канал
+     */
+    public function create(Request $request)
+    {
+        $this->channel->create([
+            'name' => $request->name,
+            'type' => $request->type
+        ]);
+
+        return redirect('/show_messages');
+
+    }
 }

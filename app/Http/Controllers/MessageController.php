@@ -51,7 +51,7 @@ class MessageController extends Controller
         ]);
 
         $this->channelMailingService->sendToDifferentChannels(
-            $request->provider_type,
+            $request->channel_type,
             [
                 'contact' => $request->contact,
                 'data' => $request->data

@@ -32,16 +32,16 @@ class ChannelMailingService
     }
 
     /**
-     * @param $providersArray
+     * @param $channelsArray
      * @param $messageId
      * @param $contactData
      * Отправка по разным каналам
      */
-    public function sendToDifferentChannels($providersArray, $contactData, $messageId)
+    public function sendToDifferentChannels($channelsArray, $contactData, $messageId)
     {
         foreach ($this->channelsArray as $singleChannel)
         {
-            if(in_array($singleChannel->type, $providersArray))
+            if(in_array($singleChannel->type, $channelsArray))
             {
                 $singleChannel->send($contactData);
                 $this->channelController->saveStatusSend($singleChannel->type, $messageId);
@@ -68,6 +68,6 @@ class ChannelMailingService
             }
         }
 
-
     }
+
 }

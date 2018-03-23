@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <h4> Создать сообщение </h4>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label text-md-right"></label>
+
+            <div class="col-md-6">
+                <h4> Создать сообщение </h4>
+            </div>
+        </div>
 
         <form method="POST" role="form" action="{{ url('/message/create') }}">
             @csrf
@@ -22,12 +28,15 @@
                         <div class="col-md-4">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="provider_type[]" value="{{ $channel->type }}"> {{ $channel->name }}
+                                        <input type="checkbox" name="channel_type[]" value="{{ $channel->type }}"> {{ $channel->name }}
                                     </label>
                                 </div>
                         </div>
                     @endforeach
                 </div>
+
+
+                <div><a href="{{ url('/channel/show_create_view/') }}">Создать канал</a></div>
             </div>
 
             <div class="form-group row">

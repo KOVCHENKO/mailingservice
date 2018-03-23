@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MessageRequest extends FormRequest
+class ChannelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,16 @@ class MessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required',
-            'contact' => 'required|max:255',
-            'data' => 'required|max:255',
-            'channel_type' => 'required'
+            'name' => 'required',
+            'type' => 'required'
         ];
     }
 
     public function messages()
     {
         return [
+            'name.required' => 'Введите название',
             'type.required' => 'Введите тип',
-            'contact.required' => 'Введите контакт',
-            'data.required' => 'Введите данные',
-            'channel_type.required' => 'Выберите провайдера/ов',
         ];
     }
 }
