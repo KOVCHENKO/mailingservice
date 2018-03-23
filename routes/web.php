@@ -28,5 +28,3 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/send_again', 'MessageController@attemptToSendAgain');
 
 });
-
-//Route::get('/home', 'HomeController@index')->name('home');

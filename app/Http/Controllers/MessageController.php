@@ -79,15 +79,24 @@ class MessageController extends Controller
 
     public function attemptToSendAgain()
     {
-        $channelsArray = $this->message->with('failedChannels')->get();
-        dd($channelsArray);
+        $failedMessageChannels = $this->message->with('failedChannels')->get();
 
         $channelsArray = array();
-        $contactData = '';
-        $messageId = 0;
 
-        $this->channelMailingService->sendToDifferentChannels($channelsArray, $contactData, $messageId);
+        foreach ($failedMessageChannels as $failedMessageChannel)
+        {
+            foreach($failedMessageChannel->failedChannels as $failedChannel) {
+                array_push($channelsArray, $failedChannel->type);
+            }
+
+            $this->channelMailingService->sendToDifferentChannels(
+                $channelsArray,
+                [
+                    'contact' => $failedMessageChannel->contact,
+                    'data' => $failedMessageChannel->data
+                ],
+                $failedMessageChannel->id);
+        }
     }
-
 
 }
