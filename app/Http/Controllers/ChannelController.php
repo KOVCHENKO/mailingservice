@@ -27,28 +27,6 @@ class ChannelController extends Controller
     }
 
     /**
-     * @param $channelType
-     * @param $messageId
-     * Записать в БД статус об отправке сообщения
-     */
-    public function saveStatusSend($channelType, $messageId)
-    {
-        $specificChannel = $this->channel->getByType($channelType);
-        $specificChannel->messages()->attach($messageId, ['status' => 'sent']);
-    }
-
-    /**
-     * @param $channelType
-     * @param $messageId
-     * Сообщение не удалось отправить ни по одному из провайдеров
-     */
-    public function saveStatusFailed($channelType, $messageId)
-    {
-        $specificChannel = $this->channel->getByType($channelType);
-        $specificChannel->messages()->attach($messageId, ['status' => 'failed']);
-    }
-
-    /**
      * Показать view для создания канала
      */
     public function showCreateView()
@@ -68,6 +46,6 @@ class ChannelController extends Controller
         ]);
 
         return redirect('/show_messages');
-
     }
+
 }

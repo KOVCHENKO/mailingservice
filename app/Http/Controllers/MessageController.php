@@ -47,7 +47,8 @@ class MessageController extends Controller
         $message = $this->message->create([
             'type' => $request->type,
             'contact' => $request->contact,
-            'data' => $request->data
+            'data' => $request->data,
+            'status' => 'created'
         ]);
 
         $this->channelMailingService->sendToDifferentChannels(
@@ -60,15 +61,32 @@ class MessageController extends Controller
         );
 
         return redirect('/show_messages');
-
     }
 
+    /**
+     * @param $messageId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Получить статус сообщения
+     */
     public function getStatus($messageId)
     {
         $message = $this->message->where('id', $messageId)->with('channels')->first();
         $this->channelMailingService->getMessageStatus($message);
 
         return redirect('/show_messages');
+    }
+
+
+    public function attemptToSendAgain()
+    {
+        $channelsArray = $this->message->with('failedChannels')->get();
+        dd($channelsArray);
+
+        $channelsArray = array();
+        $contactData = '';
+        $messageId = 0;
+
+        $this->channelMailingService->sendToDifferentChannels($channelsArray, $contactData, $messageId);
     }
 
 

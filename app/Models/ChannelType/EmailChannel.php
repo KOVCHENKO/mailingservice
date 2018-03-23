@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Mail;
 class EmailChannel implements ChannelInterface
 {
     public $type = 'email';
+    public $attempts = 6;
+
     private $client;
 
     /**
@@ -29,7 +31,7 @@ class EmailChannel implements ChannelInterface
         ));
         */
 
-        return true;
+        return false;
     }
 
     public function getStatus($messageId)

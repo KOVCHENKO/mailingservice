@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 class TelegramChannel implements ChannelInterface
 {
     public $type = 'telegram';
+    public $attempts = 3;
+
     private $client;
 
     /**

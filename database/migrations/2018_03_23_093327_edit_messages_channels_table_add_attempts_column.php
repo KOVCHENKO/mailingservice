@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class EditMessagesChannelsTableAddStatusColumn extends Migration
+class EditMessagesChannelsTableAddAttemptsColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class EditMessagesChannelsTableAddStatusColumn extends Migration
     public function up()
     {
         Schema::table('messages_channels', function (Blueprint $table) {
-            $table->string('status');
+            $table->integer('attempts')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class EditMessagesChannelsTableAddStatusColumn extends Migration
     public function down()
     {
         Schema::table('messages_channels', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('attempts');
         });
     }
 }

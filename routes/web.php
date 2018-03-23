@@ -24,6 +24,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/channel/show_create_view', 'ChannelController@showCreateView' );
     Route::post('/channel/create', 'ChannelController@create' );
 
+
+    Route::get('/send_again', 'MessageController@attemptToSendAgain');
+
 });
 
 //Route::get('/home', 'HomeController@index')->name('home');

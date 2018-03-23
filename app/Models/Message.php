@@ -10,15 +10,27 @@ class Message extends Model
         'type',
         'contact',
         'data',
+        'status'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * сообщения_каналы - все
+     */
     public function channels()
     {
         return $this->belongsToMany('App\Models\Channel', 'messages_channels');
     }
 
-    public function updateMessageChannelStatus()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * Получить все сообщения, которые не были доставлены по определенным каналам
+     */
+    public function failedChannels()
     {
-        $user->roles()->updateExistingPivot($roleId, $attributes);
+        return $this->belongsToMany('App\Models\Channel', 'messages_channels')->wherePivot('status', 'failed');
     }
+
+
+
 }

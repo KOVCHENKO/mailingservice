@@ -9,8 +9,16 @@
 namespace App\Models\ProviderType;
 
 
+use GuzzleHttp\Client;
+
 class SmsRuProvider implements ProviderTypeInterface
 {
+    private $client;
+
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
 
     public function send($connectionData)
     {

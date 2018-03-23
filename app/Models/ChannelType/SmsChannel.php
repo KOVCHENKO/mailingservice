@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 class SmsChannel implements ChannelInterface
 {
     public $type = 'sms';
-    private $client;
+    public $attempts = 4;
 
     private $providers = array();
 
@@ -17,10 +17,8 @@ class SmsChannel implements ChannelInterface
      * EmailChannel constructor.
      * @param $client
      */
-    public function __construct(Client $client,
-                                SmskaProvider $smskaProvider, SmsRuProvider $smsRuProvider)
+    public function __construct(SmskaProvider $smskaProvider, SmsRuProvider $smsRuProvider)
     {
-        $this->client = $client;
         array_push($this->providers, $smskaProvider, $smsRuProvider);
     }
 

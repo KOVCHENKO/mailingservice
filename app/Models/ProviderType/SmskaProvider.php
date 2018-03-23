@@ -3,8 +3,21 @@
 namespace App\Models\ProviderType;
 
 
+use GuzzleHttp\Client;
+
 class SmskaProvider implements ProviderTypeInterface
 {
+    private $client;
+
+    /**
+     * SmskaProvider constructor.
+     * @param $client
+     */
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
 
     public function send($connectionData)
     {

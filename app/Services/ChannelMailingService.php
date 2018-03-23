@@ -18,16 +18,16 @@ use App\Models\ChannelType\TelegramChannel;
 class ChannelMailingService
 {
     private $channelsArray = array();
-    private $channelController;
+    private $statusService;
 
     /**
      * ChannelMailingService constructor.
      */
     public function __construct(
-        ChannelController $channelController,
+        StatusService $statusService,
         SmsChannel $smsChannel, EmailChannel $emailChannel, TelegramChannel $telegramChannel)
     {
-        $this->channelController = $channelController;
+        $this->statusService = $statusService;
         array_push($this->channelsArray, $smsChannel, $emailChannel, $telegramChannel);
     }
 
@@ -43,8 +43,12 @@ class ChannelMailingService
         {
             if(in_array($singleChannel->type, $channelsArray))
             {
-                $singleChannel->send($contactData);
-                $this->channelController->saveStatusSend($singleChannel->type, $messageId);
+                $status = $singleChannel->send($contactData);
+                if($status) {
+                    $this->statusService->saveStatusSend($singleChannel, $messageId);
+                } else {
+                    $this->statusService->saveStatusFailed($singleChannel, $messageId);
+                }
             }
         }
     }
