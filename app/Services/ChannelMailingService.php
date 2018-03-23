@@ -9,25 +9,27 @@
 namespace App\Services;
 
 
-use App\Http\Controllers\ChannelController;
-use App\Models\Channel;
 use App\Models\ChannelType\EmailChannel;
 use App\Models\ChannelType\SmsChannel;
 use App\Models\ChannelType\TelegramChannel;
+use App\Models\Message;
 
 class ChannelMailingService
 {
     private $channelsArray = array();
     private $statusService;
+    private $message;
 
     /**
      * ChannelMailingService constructor.
      */
     public function __construct(
-        StatusService $statusService,
+        StatusService $statusService, Message $message,
         SmsChannel $smsChannel, EmailChannel $emailChannel, TelegramChannel $telegramChannel)
     {
         $this->statusService = $statusService;
+        $this->message = $message;
+
         array_push($this->channelsArray, $smsChannel, $emailChannel, $telegramChannel);
     }
 
@@ -71,7 +73,6 @@ class ChannelMailingService
                 }
             }
         }
-
     }
 
 }

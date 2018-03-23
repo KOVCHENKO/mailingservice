@@ -28,7 +28,8 @@ class Message extends Model
      */
     public function failedChannels()
     {
-        return $this->belongsToMany('App\Models\Channel', 'messages_channels')->wherePivot('status', 'failed');
+        return $this->belongsToMany('App\Models\Channel', 'messages_channels')
+            ->wherePivot('status', 'failed')->wherePivot('attempts', '<>', 0);
     }
 
 

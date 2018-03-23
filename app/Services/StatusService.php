@@ -82,7 +82,6 @@ class StatusService
      */
     private function checkMessageChannelExistence($channelId, $messageId)
     {
-
         $mesChan = DB::table('messages_channels')
             ->where(['message_id' => $messageId, 'channel_id' => $channelId ])
             ->first();
@@ -93,5 +92,4 @@ class StatusService
             return true;
         }
     }
-
 }

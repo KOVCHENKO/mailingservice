@@ -76,27 +76,4 @@ class MessageController extends Controller
         return redirect('/show_messages');
     }
 
-
-    public function attemptToSendAgain()
-    {
-        $failedMessageChannels = $this->message->with('failedChannels')->get();
-
-        $channelsArray = array();
-
-        foreach ($failedMessageChannels as $failedMessageChannel)
-        {
-            foreach($failedMessageChannel->failedChannels as $failedChannel) {
-                array_push($channelsArray, $failedChannel->type);
-            }
-
-            $this->channelMailingService->sendToDifferentChannels(
-                $channelsArray,
-                [
-                    'contact' => $failedMessageChannel->contact,
-                    'data' => $failedMessageChannel->data
-                ],
-                $failedMessageChannel->id);
-        }
-    }
-
 }
