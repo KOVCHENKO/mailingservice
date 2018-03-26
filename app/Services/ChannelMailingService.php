@@ -19,7 +19,7 @@ class ChannelMailingService
     private $channelsArray = array();
     private $statusService;
     private $message;
-
+    
     /**
      * ChannelMailingService constructor.
      */
@@ -41,18 +41,23 @@ class ChannelMailingService
      */
     public function sendToDifferentChannels($channelsArray, $contactData, $messageId)
     {
+        $attemptResult = false;
+
         foreach ($this->channelsArray as $singleChannel)
         {
             if(in_array($singleChannel->type, $channelsArray))
             {
                 $status = $singleChannel->send($contactData);
+
                 if($status) {
-                    $this->statusService->saveStatusSend($singleChannel, $messageId);
+                    $attemptResult = $this->statusService->saveStatusSend($singleChannel, $messageId);
                 } else {
-                    $this->statusService->saveStatusFailed($singleChannel, $messageId);
+                    $attemptResult = $this->statusService->saveStatusFailed($singleChannel, $messageId);
                 }
             }
         }
+
+        return $attemptResult;
     }
 
     /**

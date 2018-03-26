@@ -41,6 +41,8 @@ class StatusService
         }
 
         $this->reduceAttemps($specificChannel->id, $messageId);
+
+        return true;
     }
 
     /**
@@ -60,6 +62,9 @@ class StatusService
         }
 
         $this->reduceAttemps($specificChannel->id, $messageId);
+
+        return true;
+
     }
 
     /**
