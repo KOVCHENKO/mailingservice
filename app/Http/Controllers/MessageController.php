@@ -48,7 +48,6 @@ class MessageController extends Controller
             'type' => $request->type,
             'contact' => $request->contact,
             'data' => $request->data,
-            'status' => 'created'
         ]);
 
         $this->channelMailingService->sendToDifferentChannels(

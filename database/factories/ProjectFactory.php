@@ -7,7 +7,6 @@ $factory->define(App\Models\Message::class, function (Faker $faker) {
         'type' => 'register',
         'contact' => '89170863638',
         'data' => 'this one is registration message',
-        'status' => 'created'
     ];
 });
 

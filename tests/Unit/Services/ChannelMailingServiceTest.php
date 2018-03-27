@@ -18,10 +18,20 @@ class ChannelMailingServiceTest extends TestCase
 
     private $channelMailingService;
 
+    private $smsChannel;
+    private $emailChannel;
+    private $telegramChannel;
+    private $messageModel;
+
     protected function setUp()
     {
         parent::setUp();
 
+        $this->smsChannel = Mockery::mock('App\Models\ChannelType\SmsChannel');
+        $this->emailChannel = Mockery::mock('App\Models\ChannelType\EmailChannel');
+        $this->telegramChannel = Mockery::mock('App\Models\ChannelType\TelegramChannel');
+        $this->messageModel = Mockery::mock('App\Models\Message');
+        $this->channelModel = Mockery::mock('App\Models\Channel');
     }
 
 
@@ -33,29 +43,23 @@ class ChannelMailingServiceTest extends TestCase
             'data' => '1'
         ];
 
-        $smsChannel = Mockery::mock('App\Models\ChannelType\SmsChannel');
-
-        $emailChannel = Mockery::mock('App\Models\ChannelType\EmailChannel');
-        $emailChannel->shouldReceive('send')
+        $this->emailChannel->shouldReceive('send')
             ->with($connectionData)
             ->once()
             ->andReturn(true);
 
-
-        $telegramChannel = Mockery::mock('App\Models\ChannelType\TelegramChannel');
-        $telegramChannel->shouldReceive('send')
+        $this->telegramChannel->shouldReceive('send')
             ->with($connectionData)
             ->once()
             ->andReturn(true);
 
         $collection = Mockery::mock('Illuminate\Support\Collection');
-        $channelTypeFactory = new ChannelTypeFactory($collection, $smsChannel, $emailChannel, $telegramChannel);
+        $channelTypeFactory = new ChannelTypeFactory($collection, $this->smsChannel, $this->emailChannel, $this->telegramChannel);
 
         $channel = new Channel();
-        $message = new Message();
         $statusService = new StatusService($channel);
 
-        $this->channelMailingService = new ChannelMailingService($statusService, $message, $channelTypeFactory);
+        $this->channelMailingService = new ChannelMailingService($statusService, $this->messageModel, $channelTypeFactory);
 
 
         $message = factory(Message::class)->create();
@@ -82,23 +86,16 @@ class ChannelMailingServiceTest extends TestCase
             ['message_id' => $message->id, 'channel_id' => $channel->id, 'status' => 'sent', 'attempts' => 5]
         );
 
-        $smsChannel = Mockery::mock('App\Models\ChannelType\SmsChannel');
-
-        $emailChannel = Mockery::mock('App\Models\ChannelType\EmailChannel');
-
-        $telegramChannel = Mockery::mock('App\Models\ChannelType\TelegramChannel');
-        $telegramChannel->shouldReceive('getStatus')
+        $this->telegramChannel->shouldReceive('getStatus')
             ->with($message->id)
             ->once()
             ->andReturn(config('statuses.3'));
 
         $collection = Mockery::mock('Illuminate\Support\Collection');
-        $channelTypeFactory = new ChannelTypeFactory($collection, $smsChannel, $emailChannel, $telegramChannel);
+        $channelTypeFactory = new ChannelTypeFactory($collection, $this->smsChannel, $this->emailChannel, $this->telegramChannel);
 
-        $channel = new Channel();
-        $messageModel = new Message();
-        $statusService = new StatusService($channel);
-        $this->channelMailingService = new ChannelMailingService($statusService, $messageModel, $channelTypeFactory);
+        $statusService = new StatusService($this->channelModel);
+        $this->channelMailingService = new ChannelMailingService($statusService, $this->messageModel, $channelTypeFactory);
 
         /* Make */
         $result = $this->channelMailingService->getMessageStatus($message);

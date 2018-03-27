@@ -15,6 +15,7 @@ use App\Services\MailingSchedulingService;
 use App\Services\StatusService;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Mockery;
 use Tests\TestCase;
 
@@ -25,7 +26,7 @@ class MailingSchedulingServiceTest extends TestCase
     public function test_scheduling_service_send_failed_messages()
     {
         /* Prepare */
-        /* ??? How to remake to Mocking ??? */
+        /* ??? Is it necessary to make mocking or I can leave it as it is ??? */
         $client = new Client();
         $smska = new SmskaProvider($client);
         $smsRu = new SmsRuProvider($client);
@@ -36,13 +37,18 @@ class MailingSchedulingServiceTest extends TestCase
         $collection = Mockery::mock('Illuminate\Support\Collection');
         $channelTypeFactory = new ChannelTypeFactory($collection, $smsChannel, $emailChannel, $telegramChannel);
 
-        $message = factory(Message::class)->create();
         $constructorMessage = new Message();
-
 
         $channel = new Channel();
         $statusService = new StatusService($channel);
-        $channelMailingService = new ChannelMailingService($statusService, $message, $channelTypeFactory);
+        $channelMailingService = new ChannelMailingService($statusService, $constructorMessage, $channelTypeFactory);
+
+        /* Creating FailingMessages */
+        $message = factory(Message::class)->create();
+        $channel = factory(Channel::class)->create();
+        DB::table('messages_channels')->insert(
+            ['message_id' => $message->id, 'channel_id' => $channel->id, 'status' => 'failed', 'attempts' => 5]
+        );
 
         /* Make */
         $mailingSchedulingService = new MailingSchedulingService($constructorMessage, $channelMailingService);
