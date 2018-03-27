@@ -50,6 +50,6 @@ class TelegramChannel implements ChannelInterface
         $result = $res->getBody();
         */
 
-        return 'delivered';
+        return config('statuses.3');
     }
 }

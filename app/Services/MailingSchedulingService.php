@@ -45,13 +45,15 @@ class MailingSchedulingService
             }
 
             /* Запустить процесс повторной отсылки */
-            $this->channelMailingService->sendToDifferentChannels(
+            $attemptResult = $this->channelMailingService->sendToDifferentChannels(
                 $channelsArray,
                 [
                     'contact' => $failedMessageChannel->contact,
                     'data' => $failedMessageChannel->data
                 ],
                 $failedMessageChannel->id);
+
+            return $attemptResult;
         }
     }
 

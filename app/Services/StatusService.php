@@ -35,7 +35,7 @@ class StatusService
 
         if (!$this->checkMessageChannelExistence($specificChannel->id, $messageId)) {
             $specificChannel->messages()->attach($messageId, [
-                'status' => 'sent',
+                'status' => config('statuses.1'),
                 'attempts' => $channelType->attempts
             ]);
         }
@@ -56,7 +56,7 @@ class StatusService
 
         if (!$this->checkMessageChannelExistence($specificChannel->id, $messageId)) {
             $specificChannel->messages()->attach($messageId, [
-                'status' => 'failed',
+                'status' => config('statuses.2'),
                 'attempts' => $channelType->attempts
             ]);
         }

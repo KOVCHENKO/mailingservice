@@ -9,14 +9,12 @@
 namespace App\Services;
 
 
-use App\Models\ChannelType\EmailChannel;
-use App\Models\ChannelType\SmsChannel;
-use App\Models\ChannelType\TelegramChannel;
+use App\Models\ChannelType\ChannelTypeFactory;
 use App\Models\Message;
 
 class ChannelMailingService
 {
-    private $channelsArray = array();
+    private $channelsArray;
     private $statusService;
     private $message;
     
@@ -24,13 +22,13 @@ class ChannelMailingService
      * ChannelMailingService constructor.
      */
     public function __construct(
-        StatusService $statusService, Message $message,
-        SmsChannel $smsChannel, EmailChannel $emailChannel, TelegramChannel $telegramChannel)
+        StatusService $statusService, Message $message, ChannelTypeFactory $channelTypeFactory
+    )
     {
         $this->statusService = $statusService;
         $this->message = $message;
 
-        array_push($this->channelsArray, $smsChannel, $emailChannel, $telegramChannel);
+        $this->channelsArray = $channelTypeFactory->channelsCollection;
     }
 
     /**
@@ -67,6 +65,8 @@ class ChannelMailingService
      */
     public function getMessageStatus($message)
     {
+        $status = '';
+
         foreach ($message->channels as $channel)
         {
             foreach ($this->channelsArray as $singleChannelType)
@@ -74,10 +74,14 @@ class ChannelMailingService
                 if($channel->type == $singleChannelType->type)
                 {
                     $status = $singleChannelType->getStatus($message->id);
-                    $message->channels()->updateExistingPivot($channel->id, [ 'status' => $status ]);
+                    $message->channels()
+                        ->wherePivot('status', '<>', 'failed')
+                        ->updateExistingPivot($channel->id, [ 'status' => $status ]);
                 }
             }
         }
+
+        return $status;
     }
 
 }

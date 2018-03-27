@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: il_kow
- * Date: 3/23/18
- * Time: 11:28 AM
- */
 
 namespace App\Models\ProviderType;
 
