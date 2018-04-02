@@ -47,11 +47,11 @@ class ChannelMailingService
             {
                 $status = $singleChannel->send($contactData);
 
-                if($status) {
-                    $attemptResult = $this->statusService->saveStatusSend($singleChannel, $messageId);
-                } else {
-                    $attemptResult = $this->statusService->saveStatusFailed($singleChannel, $messageId);
+                if($status == false) {
+                    $this->statusService->saveStatusFailed($singleChannel, $messageId);
                 }
+
+                $attemptResult = $this->statusService->saveStatusSend($singleChannel, $messageId);
             }
         }
 
@@ -65,19 +65,33 @@ class ChannelMailingService
      */
     public function getMessageStatus($message)
     {
+        return $this->getChannelsForStatusCheck($message);
+    }
+
+    private function getChannelsForStatusCheck($message)
+    {
         $status = '';
 
         foreach ($message->channels as $channel)
         {
-            foreach ($this->channelsArray as $singleChannelType)
+            $status = $this->checkChannelStatus($channel, $message);
+        }
+
+        return $status;
+    }
+
+    private function checkChannelStatus($channel, $message)
+    {
+        $status = '';
+
+        foreach ($this->channelsArray as $singleChannelType)
+        {
+            if($channel->type == $singleChannelType->type)
             {
-                if($channel->type == $singleChannelType->type)
-                {
-                    $status = $singleChannelType->getStatus($message->id);
-                    $message->channels()
-                        ->wherePivot('status', '<>', 'failed')
-                        ->updateExistingPivot($channel->id, [ 'status' => $status ]);
-                }
+                $status = $singleChannelType->getStatus($message->id);
+                $message->channels()
+                    ->wherePivot('status', '<>', 'failed')
+                    ->updateExistingPivot($channel->id, [ 'status' => $status ]);
             }
         }
 

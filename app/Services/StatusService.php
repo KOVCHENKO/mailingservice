@@ -84,6 +84,7 @@ class StatusService
      * @param $channelId
      * @param $messageId
      * Проверить сущестовование записи об отсылке канала/сообщения
+     * TODO: Убрать if_else - оставить if
      */
     private function checkMessageChannelExistence($channelId, $messageId)
     {
