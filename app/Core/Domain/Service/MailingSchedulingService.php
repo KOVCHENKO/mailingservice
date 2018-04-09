@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: il_kow
- * Date: 3/23/18
- * Time: 4:37 PM
- */
 
 namespace App\Services;
 
 
+use App\Core\Domain\Services\ChannelMailingService;
 use App\Models\Message;
 
 class MailingSchedulingService

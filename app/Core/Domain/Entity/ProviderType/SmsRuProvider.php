@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\ProviderType;
+namespace App\Core\Domain\Models\ProviderType;
 
 
 use GuzzleHttp\Client;

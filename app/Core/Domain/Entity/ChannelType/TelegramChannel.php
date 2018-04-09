@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\ChannelType;
+namespace App\Core\Domain\Entity\ChannelType;
 
 use GuzzleHttp\Client;
 

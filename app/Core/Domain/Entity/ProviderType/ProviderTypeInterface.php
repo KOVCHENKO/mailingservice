@@ -6,12 +6,10 @@
  * Time: 4:11 PM
  */
 
-namespace App\Models\ChannelType;
+namespace App\Core\Domain\Models\ProviderType;
 
 
-interface ChannelInterface
+interface ProviderTypeInterface
 {
     public function send($connectionData);
-
-    public function getStatus($messageId);
 }

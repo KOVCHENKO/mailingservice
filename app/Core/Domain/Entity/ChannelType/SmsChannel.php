@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models\ChannelType;
+namespace App\Core\Domain\Entity\ChannelType;
 
-use App\Models\ProviderType\SmskaProvider;
-use App\Models\ProviderType\SmsRuProvider;
+use App\Core\Domain\Models\ProviderType\SmskaProvider;
+use App\Core\Domain\Models\ProviderType\SmsRuProvider;
 use GuzzleHttp\Client;
 
 class SmsChannel implements ChannelInterface

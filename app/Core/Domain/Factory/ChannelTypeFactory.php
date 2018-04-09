@@ -1,14 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: il_kow
- * Date: 3/26/18
- * Time: 2:50 PM
- */
 
-namespace App\Models\ChannelType;
+namespace App\Core\Domain\Factory;
 
 
+use App\Core\Domain\Entity\ChannelType\EmailChannel;
+use App\Core\Domain\Entity\ChannelType\SmsChannel;
+use App\Core\Domain\Entity\ChannelType\TelegramChannel;
 use Illuminate\Support\Collection;
 
 class ChannelTypeFactory

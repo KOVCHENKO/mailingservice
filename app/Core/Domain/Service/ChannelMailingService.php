@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: il_kow
- * Date: 3/21/18
- * Time: 3:39 PM
- */
 
-namespace App\Services;
+namespace App\Core\Domain\Services;
 
 
-use App\Models\ChannelType\ChannelTypeFactory;
+use App\Core\Domain\Factory\ChannelTypeFactory;
 use App\Models\Message;
+use App\Services\StatusService;
 
 class ChannelMailingService
 {
