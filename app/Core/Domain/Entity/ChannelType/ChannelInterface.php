@@ -7,5 +7,5 @@ interface ChannelInterface
 {
     public function send($connectionData);
 
-    public function getStatus($messageId);
+    public function getRemoteStatus($messageId);
 }

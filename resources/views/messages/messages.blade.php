@@ -80,6 +80,7 @@
             <th>Контакт</th>
             <th>Данные</th>
             <th>Создано</th>
+            <th>Канал</th>
             <th>Запросить подтверждение</th>
         </tr>
         </thead>
@@ -90,15 +91,18 @@
                 <td> {{ $message -> contact }}</td>
                 <td> {{ $message -> data }}</td>
                 <td> {{ $message -> created_at }}</td>
-                <td> <a href="{{ url('/message/get_status/'.$message -> id)  }}">Запрос</a></td>
 
-                {{--<td>--}}
-                    {{--<select class="form-control">--}}
-                        {{--@foreach($admin -> admin_IPs as $singleIP)--}}
-                            {{--<option>{{ $singleIP }}</option>--}}
-                        {{--@endforeach--}}
-                    {{--</select>--}}
-                {{--</td>--}}
+                <td>
+                    <select class="form-control">
+                        @foreach($message -> channels as $singleChannel)
+                            <option>Имя: {{ $singleChannel -> name }} - Статус: {{ $singleChannel -> pivot -> status }}</option>
+                        @endforeach
+                    </select>
+                </td>
+
+                <td> <a href="{{ url('/message/sync/'.$message -> id)  }}">Запрос</a></td>
+
+
 
             </tr>
 

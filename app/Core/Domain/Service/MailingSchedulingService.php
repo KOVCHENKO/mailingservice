@@ -3,53 +3,51 @@
 namespace App\Services;
 
 
+use App\Core\Domain\Repository\MessageRepositoryInterface;
+use App\Core\Domain\Service\ChannelService;
 use App\Core\Domain\Services\ChannelMailingService;
 use App\Models\Message;
 
 class MailingSchedulingService
 {
-
-    private $message;
+    private $messageRepository;
+    private $channelService;
     private $channelMailingService;
 
     /**
      * MailingSchedulingService constructor.
-     * @param $message
-     * @param $channelMailingService
+     * @param MessageRepositoryInterface $messageRepository
+     * @param ChannelService $channelService
+     * @param ChannelMailingService $channelMailingService
      */
-    public function __construct(Message $message, ChannelMailingService $channelMailingService)
+    public function __construct(MessageRepositoryInterface $messageRepository,
+                                ChannelService $channelService,
+                                ChannelMailingService $channelMailingService)
     {
-        $this->message = $message;
+        $this->messageRepository = $messageRepository;
+        $this->channelService = $channelService;
         $this->channelMailingService = $channelMailingService;
     }
 
-    /**
-     * Разослать сообщения со статусом failed
-     */
     public function attemptToSendAgain()
     {
-        /* Получить все неотправленные сообщения */
-        $failedMessageChannels = $this->message->with('failedChannels')->get();
+        $failedMessages = $this->messageRepository->getFailedMessages();
 
-        foreach ($failedMessageChannels as $failedMessageChannel)
+        foreach ($failedMessages as $failedMessage)
         {
-            /* Отобрать все типы failed каналов для сообщения */
-            $channelsArray = array();
-            foreach($failedMessageChannel->failedChannels as $failedChannel) {
-                array_push($channelsArray, $failedChannel->type);
-            }
+            $channelTypesForSending = $this->channelService->getChannelTypesForSending($failedMessage);
 
-            /* Запустить процесс повторной отсылки */
             $attemptResult = $this->channelMailingService->sendToDifferentChannels(
-                $channelsArray,
+                $channelTypesForSending,
                 [
-                    'contact' => $failedMessageChannel->contact,
-                    'data' => $failedMessageChannel->data
+                    'contact' => $failedMessage->contact,
+                    'data' => $failedMessage->data
                 ],
-                $failedMessageChannel->id);
+                $failedMessage->id);
 
-            return $attemptResult;
         }
+
+        return $attemptResult;
     }
 
 

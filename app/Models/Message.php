@@ -19,7 +19,7 @@ class Message extends Model
      */
     public function channels()
     {
-        return $this->belongsToMany('App\Models\Channel', 'messages_channels');
+        return $this->belongsToMany('App\Models\Channel', 'messages_channels')->withPivot('status');
     }
 
     /**
@@ -29,7 +29,8 @@ class Message extends Model
     public function failedChannels()
     {
         return $this->belongsToMany('App\Models\Channel', 'messages_channels')
-            ->wherePivot('status', 'failed')->wherePivot('attempts', '<>', 0);
+            ->wherePivot('status', '=', 'failed')
+            ->wherePivot('attempts', '<>', 0);
     }
 
 

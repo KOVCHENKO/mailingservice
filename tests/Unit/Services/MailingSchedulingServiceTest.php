@@ -12,7 +12,7 @@ use App\Models\ProviderType\SmskaProvider;
 use App\Models\ProviderType\SmsRuProvider;
 use App\Services\ChannelMailingService;
 use App\Services\MailingSchedulingService;
-use App\Services\StatusService;
+use App\Services\ChannelService;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
@@ -40,7 +40,7 @@ class MailingSchedulingServiceTest extends TestCase
         $constructorMessage = new Message();
 
         $channel = new Channel();
-        $statusService = new StatusService($channel);
+        $statusService = new ChannelService($channel);
         $channelMailingService = new ChannelMailingService($statusService, $constructorMessage, $channelTypeFactory);
 
         /* Creating FailingMessages */

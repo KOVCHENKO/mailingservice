@@ -2,25 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Domain\Repository\ChannelRepositoryInterface;
+use App\Core\Domain\Repository\MessageRepositoryInterface;
+use App\Core\Domain\Services\ChannelMailingService;
 use App\Http\Requests\MessageRequest;
-use App\Models\Message;
-use App\Services\ChannelMailingService;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    private $message;
-    private $channelController;
     private $channelMailingService;
+
+    private $channelRepository;
+    private $messageRepository;
+
+
 
     /**
      * MessageController constructor.
      */
-    public function __construct(Message $message, ChannelController $channelController, ChannelMailingService $channelMailingService)
+    public function __construct(ChannelMailingService $channelMailingService,
+
+                                ChannelRepositoryInterface $channelRepository,
+                                MessageRepositoryInterface $messageRepository
+                                )
     {
-        $this->message = $message;
-        $this->channelController = $channelController;
         $this->channelMailingService = $channelMailingService;
+
+        $this->channelRepository = $channelRepository;
+        $this->messageRepository = $messageRepository;
     }
 
 
@@ -29,8 +38,8 @@ class MessageController extends Controller
      */
     public function show()
     {
-        $channels = $this->channelController->getAll();
-        $messages = $this->message->all();
+        $channels = $this->channelRepository->getAll();
+        $messages = $this->messageRepository->getAll();
 
         return view('messages.messages')->with([
                 'channels' => $channels,
@@ -44,11 +53,7 @@ class MessageController extends Controller
      */
     public function create(MessageRequest $request)
     {
-        $message = $this->message->create([
-            'type' => $request->type,
-            'contact' => $request->contact,
-            'data' => $request->data,
-        ]);
+        $message = $this->messageRepository->create($request);
 
         $this->channelMailingService->sendToDifferentChannels(
             $request->channel_type,
@@ -67,10 +72,11 @@ class MessageController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * Получить статус сообщения
      */
-    public function getStatus($messageId)
+    public function sync($messageId)
     {
-        $message = $this->message->where('id', $messageId)->with('channels')->first();
-        $this->channelMailingService->getMessageStatus($message);
+        $messageWithChannels = $this->messageRepository->getMessageWithChannels($messageId);
+
+        $this->channelMailingService->sync($messageWithChannels);
 
         return redirect('/show_messages');
     }

@@ -34,7 +34,7 @@ class EmailChannel implements ChannelInterface
         return false;
     }
 
-    public function getStatus($messageId)
+    public function getRemoteStatus($messageId)
     {
         /*
         $res = $this->request('GET', 'http://smska.ru/api.php', [

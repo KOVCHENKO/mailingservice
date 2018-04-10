@@ -4,24 +4,26 @@ namespace App\Core\Domain\Services;
 
 
 use App\Core\Domain\Factory\ChannelTypeFactory;
-use App\Models\Message;
-use App\Services\StatusService;
+use App\Core\Domain\Repository\MessageRepositoryInterface;
+use App\Core\Domain\Service\ChannelService;
 
 class ChannelMailingService
 {
     private $channelsArray;
-    private $statusService;
-    private $message;
-    
+    private $channelService;
+    private $messageRepository;
+
     /**
      * ChannelMailingService constructor.
      */
     public function __construct(
-        StatusService $statusService, Message $message, ChannelTypeFactory $channelTypeFactory
+        ChannelService $channelService,
+        MessageRepositoryInterface $messageRepository,
+        ChannelTypeFactory $channelTypeFactory
     )
     {
-        $this->statusService = $statusService;
-        $this->message = $message;
+        $this->channelService = $channelService;
+        $this->messageRepository = $messageRepository;
 
         $this->channelsArray = $channelTypeFactory->channelsCollection;
     }
@@ -43,10 +45,11 @@ class ChannelMailingService
                 $status = $singleChannel->send($contactData);
 
                 if($status == false) {
-                    $this->statusService->saveStatusFailed($singleChannel, $messageId);
+                    $this->channelService->saveStatusFailed($singleChannel, $messageId);
+                    continue;
                 }
 
-                $attemptResult = $this->statusService->saveStatusSend($singleChannel, $messageId);
+                $attemptResult = $this->channelService->saveStatusSend($singleChannel, $messageId);
             }
         }
 
@@ -58,24 +61,28 @@ class ChannelMailingService
      * @param $channels
      * Проверить статус сообщения
      */
-    public function getMessageStatus($message)
+    public function sync($message)
     {
-        return $this->getChannelsForStatusCheck($message);
+        return $this->getChannelsForSync($message);
     }
 
-    private function getChannelsForStatusCheck($message)
+    private function getChannelsForSync($message)
     {
         $status = '';
 
         foreach ($message->channels as $channel)
         {
-            $status = $this->checkChannelStatus($channel, $message);
+            if($channel->pivot->status == config('statuses.1'))
+            {
+                $status = $this->checkRemoteChannelStatus($channel, $message);
+                $this->messageRepository->updateMessageStatus($channel, $status);
+            }
         }
 
         return $status;
     }
 
-    private function checkChannelStatus($channel, $message)
+    private function checkRemoteChannelStatus($channel, $message)
     {
         $status = '';
 
@@ -83,10 +90,7 @@ class ChannelMailingService
         {
             if($channel->type == $singleChannelType->type)
             {
-                $status = $singleChannelType->getStatus($message->id);
-                $message->channels()
-                    ->wherePivot('status', '<>', 'failed')
-                    ->updateExistingPivot($channel->id, [ 'status' => $status ]);
+                $status = $singleChannelType->getRemoteStatus($message->id);
             }
         }
 

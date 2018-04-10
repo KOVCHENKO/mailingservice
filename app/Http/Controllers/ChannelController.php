@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Domain\Repository\ChannelRepositoryInterface;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
-    private $channel;
+    private $channelRepository;
 
     /**
      * ChannelController constructor.
      */
-    public function __construct(Channel $channel)
+    public function __construct(ChannelRepositoryInterface $channelRepository)
     {
-        $this->channel = $channel;
+        $this->channelRepository = $channelRepository;
     }
 
     /**
@@ -23,7 +24,7 @@ class ChannelController extends Controller
      */
     public function getAll()
     {
-        return $this->channel->all();
+        return $this->channelRepository->getAll();
     }
 
     /**
@@ -40,10 +41,7 @@ class ChannelController extends Controller
      */
     public function create(Request $request)
     {
-        $this->channel->create([
-            'name' => $request->name,
-            'type' => $request->type
-        ]);
+        $this->channelRepository->create($request);
 
         return redirect('/show_messages');
     }

@@ -41,7 +41,7 @@ class SmsChannel implements ChannelInterface
 
     }
 
-    public function getStatus($messageId)
+    public function getRemoteStatus($messageId)
     {
         /*
         $res = $this->client->request('GET', 'http://smska.ru/api.php', [

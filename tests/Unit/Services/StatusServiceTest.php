@@ -6,7 +6,7 @@ use App\Models\Channel;
 use App\Models\ChannelType\ChannelTypeFactory;
 use App\Models\Message;
 use App\Services\ChannelMailingService;
-use App\Services\StatusService;
+use App\Services\ChannelService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Mockery;

@@ -19,7 +19,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('/show_messages', 'MessageController@show');
     Route::post('/message/create', 'MessageController@create');
-    Route::get('/message/get_status/{id}', 'MessageController@getStatus');
+    Route::get('/message/sync/{id}', 'MessageController@sync');
 
     Route::get('/channel/show_create_view', 'ChannelController@showCreateView' );
     Route::post('/channel/create', 'ChannelController@create' );

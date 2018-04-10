@@ -6,7 +6,7 @@ use App\Models\Channel;
 use App\Models\ChannelType\ChannelTypeFactory;
 use App\Models\Message;
 use App\Services\ChannelMailingService;
-use App\Services\StatusService;
+use App\Services\ChannelService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Mockery;
@@ -57,7 +57,7 @@ class ChannelMailingServiceTest extends TestCase
         $channelTypeFactory = new ChannelTypeFactory($collection, $this->smsChannel, $this->emailChannel, $this->telegramChannel);
 
         $channel = new Channel();
-        $statusService = new StatusService($channel);
+        $statusService = new ChannelService($channel);
 
         $this->channelMailingService = new ChannelMailingService($statusService, $this->messageModel, $channelTypeFactory);
 
@@ -94,7 +94,7 @@ class ChannelMailingServiceTest extends TestCase
         $collection = Mockery::mock('Illuminate\Support\Collection');
         $channelTypeFactory = new ChannelTypeFactory($collection, $this->smsChannel, $this->emailChannel, $this->telegramChannel);
 
-        $statusService = new StatusService($this->channelModel);
+        $statusService = new ChannelService($this->channelModel);
         $this->channelMailingService = new ChannelMailingService($statusService, $this->messageModel, $channelTypeFactory);
 
         /* Make */
