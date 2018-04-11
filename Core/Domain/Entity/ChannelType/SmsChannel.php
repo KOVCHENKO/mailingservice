@@ -2,24 +2,22 @@
 
 namespace Core\Domain\Entity\ChannelType;
 
-use Core\Domain\Models\ProviderType\SmskaProvider;
-use Core\Domain\Models\ProviderType\SmsRuProvider;
-use GuzzleHttp\Client;
+use Core\Domain\Factory\ProviderFactory;
 
 class SmsChannel implements ChannelInterface
 {
     public $type = 'sms';
     public $attempts = 4;
 
-    private $providers = array();
+    private $providers;
 
     /**
      * EmailChannel constructor.
      * @param $client
      */
-    public function __construct(SmskaProvider $smskaProvider, SmsRuProvider $smsRuProvider)
+    public function __construct(ProviderFactory $providerFactory)
     {
-        array_push($this->providers, $smskaProvider, $smsRuProvider);
+        $this->providers = $providerFactory->getProvidersForThisChannel($this->type);
     }
 
     public function send($connectionData)
@@ -30,10 +28,9 @@ class SmsChannel implements ChannelInterface
 
             if($result == false) {
                 continue;
-            } else {
-                return true;
-                break;
             }
+
+            return true;
         }
 
         return false;

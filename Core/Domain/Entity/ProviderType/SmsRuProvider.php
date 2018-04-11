@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 class SmsRuProvider implements ProviderTypeInterface
 {
     private $client;
+    public $channelType = 'sms';
 
     public function __construct(Client $client)
     {

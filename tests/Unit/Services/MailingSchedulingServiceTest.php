@@ -8,6 +8,7 @@ use Core\Domain\Entity\ChannelType\EmailChannel;
 use Core\Domain\Entity\ChannelType\SmsChannel;
 use Core\Domain\Entity\ChannelType\TelegramChannel;
 use Core\Domain\Factory\ChannelTypeFactory;
+use Core\Domain\Factory\ProviderFactory;
 use Core\Domain\Models\ProviderType\SmskaProvider;
 use Core\Domain\Models\ProviderType\SmsRuProvider;
 use Core\Domain\Service\ChannelService;
@@ -36,9 +37,7 @@ class MailingSchedulingServiceTest extends TestCase
         );
 
         /* Prepare */
-        $smska = new SmskaProvider(new Client());
-        $smsRu = new SmsRuProvider(new Client());
-        $smsChannel = new SmsChannel($smska, $smsRu);
+        $smsChannel = new SmsChannel(new ProviderFactory(new Collection(), new SmsRuProvider(new Client()), new SmskaProvider(new Client())));
         $emailChannel = new EmailChannel(new Client());
         $telegramChannel = new TelegramChannel(new Client());
 

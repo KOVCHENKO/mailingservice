@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 class SmskaProvider implements ProviderTypeInterface
 {
     private $client;
+    public $channelType = 'sms';
 
     /**
      * SmskaProvider constructor.
