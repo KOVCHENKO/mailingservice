@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Mockery;
 use Tests\TestCase;
 
-class StatusServiceTest extends TestCase
+class ChannelServiceTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -39,11 +39,11 @@ class StatusServiceTest extends TestCase
         */
 
         /* Make */
-        //  1) Tests\Unit\StatusServiceTest::test_send_status
+        //  1) Tests\Unit\ChannelServiceTest::test_send_status
         //  ErrorException: Trying to get property 'id' of non-object
         //
         //  /opt/lampp/htdocs/mailingservice/app/Services/StatusService.php:36
-        //  /opt/lampp/htdocs/mailingservice/tests/Unit/Services/StatusServiceTest.php:39
+        //  /opt/lampp/htdocs/mailingservice/tests/Unit/Services/ChannelServiceTest.phpp:39
         //  Не выходит протестировать, так как не видит $specificChannel->id, как правильно получить?
 
 //        $result = $statusService->saveStatusSend($telegramChannel, $message->id);

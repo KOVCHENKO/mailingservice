@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: il_kow
- * Date: 4/9/18
- * Time: 10:24 AM
- */
 
-namespace App\Core\Persistence\Repository;
+namespace Core\Persistence\Repository;
 
 
-use App\Core\Domain\Repository\MessageRepositoryInterface;
+use Core\Domain\Repository\MessageRepositoryInterface;
 use App\Models\Message;
 use Illuminate\Support\Facades\DB;
 
@@ -61,5 +55,7 @@ class MessageRepository implements MessageRepositoryInterface
                 'channel_id' => $channel->pivot->channel_id,
             ])
             ->update(['status' => $status]);
+
+        return true;
     }
 }

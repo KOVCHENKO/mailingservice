@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Core\Domain\Repository\ChannelRepositoryInterface;
-use App\Core\Domain\Repository\MessageRepositoryInterface;
-use App\Core\Persistence\Repository\ChannelRepository;
-use App\Core\Persistence\Repository\MessageRepository;
+use Core\Domain\Repository\ChannelRepositoryInterface;
+use Core\Domain\Repository\MessageRepositoryInterface;
+use Core\Persistence\Repository\ChannelRepository;
+use Core\Persistence\Repository\MessageRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

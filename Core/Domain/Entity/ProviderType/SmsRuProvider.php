@@ -1,28 +1,23 @@
 <?php
 
-namespace App\Core\Domain\Models\ProviderType;
+namespace Core\Domain\Models\ProviderType;
 
 
 use GuzzleHttp\Client;
 
-class SmskaProvider implements ProviderTypeInterface
+class SmsRuProvider implements ProviderTypeInterface
 {
     private $client;
 
-    /**
-     * SmskaProvider constructor.
-     * @param $client
-     */
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
-
     public function send($connectionData)
     {
         /*
-        $res = $this->client->request('GET', 'http://smska.ru/api.php', [
+        $res = $this->client->request('GET', 'http://smsru.ru/api.php', [
             'query' => [
                 'phone' => $connectionData['contact'],
                 'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
@@ -31,6 +26,7 @@ class SmskaProvider implements ProviderTypeInterface
 
         $result = $res->getBody();
         */
-        return false;
+
+        return true;
     }
 }

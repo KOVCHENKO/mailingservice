@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: il_kow
- * Date: 4/9/18
- * Time: 10:43 AM
- */
 
-namespace App\Core\Domain\Service;
+namespace Core\Domain\Service;
 
 
-use App\Core\Domain\Repository\ChannelRepositoryInterface;
+use Core\Domain\Repository\ChannelRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 class ChannelService

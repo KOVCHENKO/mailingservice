@@ -32,13 +32,13 @@ class MessageControllerTest extends TestCase
     }
 
 
-    public function test_get_status()
+    public function test_message_sync()
     {
         /* Prepare */
         $message = factory(Message::class)->create();
 
         /* Make */
-        $response = $this->call('GET', '/message/get_status/'.$message->id);
+        $response = $this->call('GET', '/message/sync/'.$message->id);
 
         /* Assert */
         $this->assertEquals(302, $response->getStatusCode());

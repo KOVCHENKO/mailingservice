@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Domain\Entity\ChannelType;
+namespace Core\Domain\Entity\ChannelType;
 
 use App\Mail\NotificationEmail;
 use GuzzleHttp\Client;

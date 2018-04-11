@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: il_kow
- * Date: 4/9/18
- * Time: 10:24 AM
- */
 
-namespace App\Core\Persistence\Repository;
+namespace Core\Persistence\Repository;
 
 
-use App\Core\Domain\Repository\ChannelRepositoryInterface;
+use Core\Domain\Repository\ChannelRepositoryInterface;
 use App\Models\Channel;
 use Illuminate\Support\Facades\DB;
 

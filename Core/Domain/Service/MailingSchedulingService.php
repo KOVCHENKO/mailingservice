@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace Core\Domain\Services;
 
 
-use App\Core\Domain\Repository\MessageRepositoryInterface;
-use App\Core\Domain\Service\ChannelService;
-use App\Core\Domain\Services\ChannelMailingService;
-use App\Models\Message;
+use Core\Domain\Repository\MessageRepositoryInterface;
+use Core\Domain\Service\ChannelService;
 
 class MailingSchedulingService
 {
@@ -28,6 +26,7 @@ class MailingSchedulingService
         $this->channelService = $channelService;
         $this->channelMailingService = $channelMailingService;
     }
+
 
     public function attemptToSendAgain()
     {

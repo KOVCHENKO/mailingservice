@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Core\Domain\Services;
+namespace Core\Domain\Services;
 
 
-use App\Core\Domain\Factory\ChannelTypeFactory;
-use App\Core\Domain\Repository\MessageRepositoryInterface;
-use App\Core\Domain\Service\ChannelService;
+use Core\Domain\Factory\ChannelTypeFactory;
+use Core\Domain\Repository\MessageRepositoryInterface;
+use Core\Domain\Service\ChannelService;
 
 class ChannelMailingService
 {

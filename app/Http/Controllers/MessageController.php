@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Domain\Repository\ChannelRepositoryInterface;
-use App\Core\Domain\Repository\MessageRepositoryInterface;
-use App\Core\Domain\Services\ChannelMailingService;
+use Core\Domain\Repository\ChannelRepositoryInterface;
+use Core\Domain\Repository\MessageRepositoryInterface;
+use Core\Domain\Services\ChannelMailingService;
 use App\Http\Requests\MessageRequest;
 use Illuminate\Http\Request;
 

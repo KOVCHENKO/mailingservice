@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Core\Domain\Factory;
+namespace Core\Domain\Factory;
 
 
-use App\Core\Domain\Entity\ChannelType\EmailChannel;
-use App\Core\Domain\Entity\ChannelType\SmsChannel;
-use App\Core\Domain\Entity\ChannelType\TelegramChannel;
+use Core\Domain\Entity\ChannelType\EmailChannel;
+use Core\Domain\Entity\ChannelType\SmsChannel;
+use Core\Domain\Entity\ChannelType\TelegramChannel;
 use Illuminate\Support\Collection;
 
 class ChannelTypeFactory

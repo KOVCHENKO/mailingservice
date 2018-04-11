@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Domain\Repository\ChannelRepositoryInterface;
+use Core\Domain\Repository\ChannelRepositoryInterface;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 

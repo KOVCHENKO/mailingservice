@@ -4,8 +4,10 @@ namespace Tests\Unit;
 
 use App\Http\Controllers\ChannelController;
 use App\Models\Channel;
+use Core\Domain\Repository\ChannelRepositoryInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Collection;
 use Mockery;
 use Tests\TestCase;
 
@@ -34,24 +36,20 @@ class ChannelControllerTest extends TestCase
     public function test_get_all_channels()
     {
         /* Prepare */
-        $message = factory(Channel::class, 3)->create();
+        $channels = factory(Channel::class, 3)->create();
 
-        /* ??? Mockery\Exception\BadMethodCallException:
-            Static method Mockery_0_App_Models_Channel::all()
-            does not exist on this mock object ???
-
-            $channelModel = Mockery::mock('App\Models\Channel');
-        */
-
-        $channelModel = new Channel();
+        $channelModel = Mockery::mock(ChannelRepositoryInterface::class);
+        $channelModel->shouldReceive('getAll')
+            ->with()
+            ->once()
+            ->andReturn($channels);
         $channelController = new ChannelController($channelModel);
 
         /* Make */
         $result = $channelController->getAll();
 
         /* Assert */
-        /* ??? Не знаю почему 6, создавал - 3 ??? */
-        $this->assertEquals(6, $result->count());
+        $this->assertEquals(3, $result->count());
     }
 
 
