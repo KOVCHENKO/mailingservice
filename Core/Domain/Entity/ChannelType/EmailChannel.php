@@ -3,7 +3,8 @@
 namespace Core\Domain\Entity\ChannelType;
 
 use App\Mail\NotificationEmail;
-use GuzzleHttp\Client;
+use Core\Domain\ApiWrappers\CurlApiInterface;
+use Core\Domain\ApiWrappers\EmailApiInterface;
 use Illuminate\Support\Facades\Mail;
 
 class EmailChannel implements ChannelInterface
@@ -11,43 +12,35 @@ class EmailChannel implements ChannelInterface
     public $type = 'email';
     public $attempts = 6;
 
-    private $client;
+    private $curlApi;
+    private $emailApi;
 
     /**
      * EmailChannel constructor.
      * @param $client
      */
-    public function __construct(Client $client)
+    public function __construct(CurlApiInterface $curlApi, EmailApiInterface $emailApi)
     {
-        $this->client = $client;
+        $this->curlApi = $curlApi;
+        $this->emailApi = $emailApi;
     }
 
 
     public function send($connectionData)
     {
-        /*
-        Mail::to($connectionData['contact'])->send(new NotificationEmail(
-            'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!'
-        ));
-        */
+        $this->emailApi->sendEmail($connectionData['contact'], $connectionData);
 
         return false;
     }
 
     public function getRemoteStatus($messageId)
     {
-        /*
-        $res = $this->request('GET', 'http://smska.ru/api.php', [
-            'query' => [
-                'phone' => $connectionData['contact'],
-                'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
-            ]
-        ]);
+        $dataArray = [
+            'message_id' => $messageId,
+        ];
 
-        $result = $res->getBody();
-        */
+        $this->curlApi->makeGetRequest('http://smska.ru/api.php', $dataArray);
 
         return config('statuses.3');
-
     }
 }

@@ -40,17 +40,15 @@ class SmsChannel implements ChannelInterface
 
     public function getRemoteStatus($messageId)
     {
-        /*
-        $res = $this->client->request('GET', 'http://smska.ru/api.php', [
-            'query' => [
-                '' => $connectionData['contact'],
-                'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
-            ]
-        ]);
+        foreach ($this->providers as $singleProvider)
+        {
+            $result = $singleProvider->getRemoteStatus($messageId);
 
-        $result = $res->getBody();
-        */
+            if($result == false) {
+                continue;
+            }
 
-        return config('statuses.3');
+            return $result;
+        }
     }
 }

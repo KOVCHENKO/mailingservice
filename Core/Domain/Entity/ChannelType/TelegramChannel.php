@@ -2,53 +2,44 @@
 
 namespace Core\Domain\Entity\ChannelType;
 
-use GuzzleHttp\Client;
+use Core\Domain\ApiWrappers\CurlApiInterface;
 
 class TelegramChannel implements ChannelInterface
 {
     public $type = 'telegram';
     public $attempts = 3;
 
-    private $client;
+    private $curlApi;
 
     /**
      * TelegramChannel constructor.
-     * @param $client
+     * @param $curlApi
      */
-    public function __construct(Client $client)
+    public function __construct(CurlApiInterface $curlApi)
     {
-        $this->client = $client;
+        $this->curlApi = $curlApi;
     }
 
 
     public function send($connectionData)
     {
-        /*
-        $res = $this->$client->request('GET', 'http://smska.ru/api.php', [
-            'query' => [
-                'phone' => $connectionData['contact'],
-                'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
-            ]
-        ]);
+        $dataArray = [
+            'phone' => $connectionData['contact'],
+            'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
+        ];
 
-        $result = $res->getBody();
-        */
+        $result = $this->curlApi->makeGetRequest('http://smska.ru/api.php', $dataArray);
 
         return true;
     }
 
     public function getRemoteStatus($messageId)
     {
-        /*
-        $res = $this->client->request('GET', 'http://smska.ru/api.php', [
-            'query' => [
-                'phone' => $connectionData['contact'],
-                'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
-            ]
-        ]);
+        $dataArray = [
+            'message_id' => $messageId,
+        ];
 
-        $result = $res->getBody();
-        */
+        $this->curlApi->makeGetRequest('http://smska.ru/api.php', $dataArray);
 
         return config('statuses.3');
     }

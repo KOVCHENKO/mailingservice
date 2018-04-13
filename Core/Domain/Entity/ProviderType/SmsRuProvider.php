@@ -3,31 +3,39 @@
 namespace Core\Domain\Models\ProviderType;
 
 
-use GuzzleHttp\Client;
+use Core\Domain\ApiWrappers\CurlApiInterface;
 
 class SmsRuProvider implements ProviderTypeInterface
 {
-    private $client;
+    private $curlApi;
     public $channelType = 'sms';
 
-    public function __construct(Client $client)
+
+    public function __construct(CurlApiInterface $curlApi)
     {
-        $this->client = $client;
+        $this->curlApi = $curlApi;
     }
 
     public function send($connectionData)
     {
-        /*
-        $res = $this->client->request('GET', 'http://smsru.ru/api.php', [
-            'query' => [
-                'phone' => $connectionData['contact'],
-                'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
-            ]
-        ]);
+        $dataArray = [
+            'phone' => $connectionData['contact'],
+            'data' => 'Дорогой'.$connectionData['data'].'! Спасибо за регистрацию!',
+        ];
 
-        $result = $res->getBody();
-        */
+        $result = $this->curlApi->makeGetRequest('http://smska.ru/api.php', $dataArray);
 
         return true;
+    }
+
+    public function getRemoteStatus($messageId)
+    {
+        $dataArray = [
+            'message_id' => $messageId,
+        ];
+
+        $this->curlApi->makeGetRequest('http://smska.ru/api.php', $dataArray);
+
+        return config('statuses.3');
     }
 }

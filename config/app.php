@@ -160,6 +160,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Project Service Providers
+         */
+        \Core\Infrastructure\ServiceProviders\ApiWrapperServiceProvider::class,
+        \Core\Infrastructure\ServiceProviders\RepositoryServiceProvider::class
+
     ],
 
     /*

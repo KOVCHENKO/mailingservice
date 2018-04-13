@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Core\Infrastructure\ServiceProviders;
 
 use Core\Domain\Repository\ChannelRepositoryInterface;
 use Core\Domain\Repository\MessageRepositoryInterface;
@@ -8,10 +8,10 @@ use Core\Persistence\Repository\ChannelRepository;
 use Core\Persistence\Repository\MessageRepository;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class RepositoryServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      *
      * @return void
      */
@@ -21,12 +21,20 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any application services.
+     * Register services.
      *
      * @return void
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            ChannelRepositoryInterface::class,
+            ChannelRepository::class
+        );
+
+        $this->app->bind(
+            MessageRepositoryInterface::class,
+            MessageRepository::class
+        );
     }
 }

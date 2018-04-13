@@ -14,6 +14,8 @@ use Core\Domain\Models\ProviderType\SmsRuProvider;
 use Core\Domain\Service\ChannelService;
 use Core\Domain\Services\ChannelMailingService;
 use Core\Domain\Services\MailingSchedulingService;
+use Core\Infrastructure\ApiWrappers\CurlApi;
+use Core\Infrastructure\ApiWrappers\EmailApi;
 use Core\Persistence\Repository\ChannelRepository;
 use Core\Persistence\Repository\MessageRepository;
 use GuzzleHttp\Client;
@@ -37,9 +39,9 @@ class MailingSchedulingServiceTest extends TestCase
         );
 
         /* Prepare */
-        $smsChannel = new SmsChannel(new ProviderFactory(new Collection(), new SmsRuProvider(new Client()), new SmskaProvider(new Client())));
-        $emailChannel = new EmailChannel(new Client());
-        $telegramChannel = new TelegramChannel(new Client());
+        $smsChannel = new SmsChannel(new ProviderFactory(new Collection(), new SmsRuProvider(new CurlApi(new Client())), new SmskaProvider(new CurlApi(new Client()))));
+        $emailChannel = new EmailChannel(new CurlApi(new Client()), new EmailApi());
+        $telegramChannel = new TelegramChannel(new CurlApi(new Client()));
 
         $collection = Mockery::mock(Collection::class);
         $channelTypeFactory = new ChannelTypeFactory($collection, $smsChannel, $emailChannel, $telegramChannel);
